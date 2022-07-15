@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  My Favorite Color App
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties: 
+      CodeUri: favorite_color/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Events:
+        App:
+          Type: Api
+          Properties:
+            Path: /color
+            Method: get
+
+Outputs:
+  AppApi:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/color/"
+  Function:
+    Description: "App Lambda Function ARN"
+    Value: !GetAtt Function.Arn
+  FunctionIamRole:
+    Description: "Implicit IAM Role created for the Lambda Function"
+    Value: !GetAtt FunctionRole.Arn
